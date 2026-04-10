@@ -1,0 +1,17 @@
+{
+  "name": "baba-guardian-access",
+  "version": "1.0.0",
+  "description": "Discord bot para controle de acesso ao canal monitoramento para babás.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "deploy-commands": "node deploy-commands.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  }
+}
