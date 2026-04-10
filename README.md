@@ -42,13 +42,6 @@ npm run deploy-commands
 npm start
 ```
 
-## Estrutura do projeto
-
-- `index.js` — Ponto de entrada do bot
-- `commands/baba.js` — Lógica do comando /baba
-- `deploy-commands.js` — Registro dos comandos no Discord
-- `.env.example` — Exemplo de configuração de ambiente
-
 ## Observações
 
 - O bot precisa de permissões para gerenciar cargos e editar permissões de canais.
