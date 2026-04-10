@@ -22,16 +22,6 @@ client.once(Events.ClientReady, () => {
   console.log(`🤖 Bot online como ${client.user.tag}`);
 });
 
-// client.on("raw", console.log);
-
-client.on("messageCreate", (message) => {
-  if (message.author.id === client.user.id) return;
-
-  message.reply({
-    content: `Olá ${message.author.username}`,
-  });
-});
-
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName !== "baba") return;
