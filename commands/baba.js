@@ -1,6 +1,6 @@
-import { PermissionFlagsBits } from "discord.js";
 import dotenv from "dotenv";
 dotenv.config();
+import baba from "../Models/baba.js";
 
 const { CHANNEL_ID, ROLE_BABA_ID } = process.env;
 
@@ -57,10 +57,7 @@ export async function handleBabaCommand(interaction) {
 
   try {
     if (subcommand === "chegou") {
-      await channel.permissionOverwrites.edit(ROLE_BABA_ID, {
-        ViewChannel: true,
-        Connect: true,
-      });
+      await baba.allowAccessToCamChannel(channel, ROLE_BABA_ID);
       await interaction.reply({
         content: "👶 Babá chegou — acesso liberado.",
       });
@@ -68,10 +65,7 @@ export async function handleBabaCommand(interaction) {
         `[ACESSO LIBERADO] Babá pode acessar o canal ${channel.name}`,
       );
     } else if (subcommand === "saiu") {
-      await channel.permissionOverwrites.edit(ROLE_BABA_ID, {
-        ViewChannel: false,
-        Connect: false,
-      });
+      await baba.denyAccessToCamChannel(channel, ROLE_BABA_ID);
       await interaction.reply({
         content: "🚪 Babá saiu — acesso removido.",
       });

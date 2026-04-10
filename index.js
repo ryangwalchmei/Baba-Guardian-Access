@@ -1,22 +1,9 @@
-import discord, { Events, IntentsBitField, Partials } from "discord.js";
 import dotenv from "dotenv";
-import { handleBabaCommand } from "./commands/baba.js";
 dotenv.config();
+import { createDiscordClient, Events } from "./Infra/discord.js";
 
 const { DISCORD_TOKEN, ROLE_PAIS_ID } = process.env;
-
-const client = new discord.Client({
-  intents: Object.keys(IntentsBitField.Flags),
-  partials: [
-    Partials.Channel,
-    Partials.GuildMember,
-    Partials.GuildScheduledEvent,
-    Partials.Message,
-    Partials.Reaction,
-    Partials.ThreadMember,
-    Partials.User,
-  ],
-});
+const client = createDiscordClient();
 
 client.once(Events.ClientReady, () => {
   console.log(`🤖 Bot online como ${client.user.tag}`);
