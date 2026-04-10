@@ -49,7 +49,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
     });
     return;
   }
-  // console.log(member); // Descomente para debug detalhado
 
   if (!member.roles.cache.has(paisRoleId)) {
     return interaction.reply({
@@ -59,7 +58,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   try {
-    // Comando delegado para o handler
     const { handleBabaCommand } = await import("./commands/baba.js");
     await handleBabaCommand(interaction);
   } catch (error) {
