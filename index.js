@@ -18,8 +18,8 @@ const client = new discord.Client({
   ],
 });
 
-client.on("ready", () => {
-  console.log("Olá mundo");
+client.once(Events.ClientReady, () => {
+  console.log(`🤖 Bot online como ${client.user.tag}`);
 });
 
 // client.on("raw", console.log);
