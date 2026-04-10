@@ -56,28 +56,57 @@ export async function handleBabaCommand(interaction) {
   }
 
   try {
-    if (subcommand === "chegou") {
-      await baba.allowAccessToCamChannel(channel, ROLE_BABA_ID);
-      await interaction.reply({
-        content: "👶 Babá chegou — acesso liberado.",
-      });
-      console.log(
-        `[ACESSO LIBERADO] Babá pode acessar o canal ${channel.name}`,
-      );
-    } else if (subcommand === "saiu") {
-      await baba.denyAccessToCamChannel(channel, ROLE_BABA_ID);
-      await interaction.reply({
-        content: "🚪 Babá saiu — acesso removido.",
-      });
-      console.log(
-        `[ACESSO REMOVIDO] Babá não pode mais acessar o canal ${channel.name}`,
-      );
-    } else {
-      await interaction.reply({
-        content: "❓ Subcomando inválido.",
-        flags: EPHEMERAL_FLAG,
-      });
-      console.log("[ERRO] Subcomando inválido:", subcommand);
+    switch (subcommand) {
+      case "chegou":
+        await baba.allowAccessToCamChannel(channel, ROLE_BABA_ID);
+        await interaction.reply({
+          content: "👶 Babá chegou — acesso liberado.",
+        });
+        console.log(
+          `[ACESSO LIBERADO] Babá pode acessar o canal ${channel.name}`,
+        );
+        break;
+      case "saiu":
+        await baba.denyAccessToCamChannel(channel, ROLE_BABA_ID);
+        await interaction.reply({
+          content: "🚪 Babá saiu — acesso removido.",
+        });
+        console.log(
+          `[ACESSO REMOVIDO] Babá não pode mais acessar o canal ${channel.name}`,
+        );
+        break;
+      case "listar":
+        try {
+          const membros = await baba.listBabaMembers(
+            interaction.guild,
+            ROLE_BABA_ID,
+          );
+          if (membros.length === 0) {
+            await interaction.reply({
+              content: "Nenhum membro com o cargo de babá encontrado.",
+              flags: EPHEMERAL_FLAG,
+            });
+          } else {
+            const lista = membros.map((m) => `- ${m.user.tag}`).join("\n");
+            await interaction.reply({
+              content: `👶 Membros com o cargo de babá:\n${lista}`,
+              flags: EPHEMERAL_FLAG,
+            });
+          }
+        } catch (err) {
+          await interaction.reply({
+            content: "Erro ao listar membros da role babá.",
+            flags: EPHEMERAL_FLAG,
+          });
+        }
+        break;
+      default:
+        await interaction.reply({
+          content: "❓ Subcomando inválido.",
+          flags: EPHEMERAL_FLAG,
+        });
+        console.log("[ERRO] Subcomando inválido:", subcommand);
+        break;
     }
   } catch (error) {
     console.error("Erro ao atualizar permissões:", error);

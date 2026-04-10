@@ -19,6 +19,11 @@ const commands = [
         description: "Remove o acesso da babá ao canal",
         type: 1, // SUB_COMMAND
       },
+      {
+        name: "listar",
+        description: "Lista todos os membros com o cargo de babá",
+        type: 1, // SUB_COMMAND
+      },
     ],
   },
 ];
