@@ -7,14 +7,32 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Conectar e fazer deploy
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "🔧 Carregando NVM..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+            echo "📦 Verificando ambiente"
+            node -v
+            npm -v
+
+            echo "📁 Entrando no projeto"
             cd /home/ubuntu/Baba-Guardian-Access
+
+            echo "⬇️ Atualizando código"
             git pull
+
+            echo "📦 Instalando dependências"
             npm install
+
+            echo "🚀 Subindo aplicação"
             pm2 reload app || pm2 start npm --name "app" -- start
+
+            echo "💾 Salvando estado do PM2"
+            pm2 save
