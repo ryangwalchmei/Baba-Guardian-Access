@@ -1,8 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { createDiscordClient, Events } from "./Infra/discord.js";
+import baba from "./Models/baba.js";
+import channel from "./Models/channel.js";
 
-const { DISCORD_TOKEN, ROLE_PAIS_ID } = process.env;
+const { DISCORD_TOKEN, ROLE_PAIS_ID, CHANNEL_ID, ROLE_BABA_ID } = process.env;
 const client = createDiscordClient();
 
 client.once(Events.ClientReady, () => {
@@ -54,6 +56,46 @@ client.on(Events.InteractionCreate, async (interaction) => {
         content: "❌ Ocorreu um erro ao processar o comando.",
         ephemeral: true,
       });
+    }
+  }
+});
+
+client.on(Events.MessageCreate, async (message) => {
+  const isChannelCorrect =
+    message.channelId === process.env.CHANNEL_TO_SENT_COMMANDS;
+  const isGuildCorrect = message.guildId === process.env.GUILD_ID;
+  const channelObject = await channel.getAChannel(message, CHANNEL_ID);
+
+  if (isChannelCorrect && isGuildCorrect && channelObject) {
+    if (!message.content) return;
+
+    switch (message.content) {
+      case "!baba chegou":
+        await baba.allowAccessToCamChannel(channelObject, ROLE_BABA_ID);
+        await message.reply({
+          content: "👶 Babá chegou — acesso liberado.",
+        });
+        console.log(
+          `[ACESSO LIBERADO] Babá pode acessar o canal ${channelObject.name}`,
+        );
+
+        // await message.delete();
+        break;
+      case "!baba saiu":
+        await baba.denyAccessToCamChannel(channelObject, ROLE_BABA_ID);
+        await message.reply({
+          content: "🚪 Babá saiu — acesso removido.",
+        });
+        console.log(
+          `[ACESSO REMOVIDO] Babá não pode mais acessar o canal ${channelObject.name}`,
+        );
+        // await message.delete();
+        break;
+
+      default:
+        console.log("CAIU EM OUTRO");
+        // await message.delete();
+        break;
     }
   }
 });

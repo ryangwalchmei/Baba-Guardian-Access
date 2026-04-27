@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import baba from "../Models/baba.js";
+import channel from "../Models/channel.js";
 
 const { CHANNEL_ID, ROLE_BABA_ID } = process.env;
 
@@ -31,48 +32,26 @@ export async function handleBabaCommand(interaction) {
     return;
   }
 
-  let channel;
-  try {
-    channel = await interaction.guild.channels.fetch(CHANNEL_ID);
-  } catch (error) {
-    console.error("Erro ao buscar canal:", error);
-    if (!interaction.replied) {
-      await interaction.reply({
-        content: "❌ Canal não encontrado.",
-        flags: EPHEMERAL_FLAG,
-      });
-    }
-    return;
-  }
-  if (!channel) {
-    if (!interaction.replied) {
-      await interaction.reply({
-        content: "❌ Canal não encontrado.",
-        flags: EPHEMERAL_FLAG,
-      });
-    }
-    console.log("[ERRO] Canal não encontrado:", CHANNEL_ID);
-    return;
-  }
+  const channelObject = await channel.getAChannel(interaction, CHANNEL_ID);
 
   try {
     switch (subcommand) {
       case "chegou":
-        await baba.allowAccessToCamChannel(channel, ROLE_BABA_ID);
+        await baba.allowAccessToCamChannel(channelObject, ROLE_BABA_ID);
         await interaction.reply({
           content: "👶 Babá chegou — acesso liberado.",
         });
         console.log(
-          `[ACESSO LIBERADO] Babá pode acessar o canal ${channel.name}`,
+          `[ACESSO LIBERADO] Babá pode acessar o canal ${channelObject.name}`,
         );
         break;
       case "saiu":
-        await baba.denyAccessToCamChannel(channel, ROLE_BABA_ID);
+        await baba.denyAccessToCamChannel(channelObject, ROLE_BABA_ID);
         await interaction.reply({
           content: "🚪 Babá saiu — acesso removido.",
         });
         console.log(
-          `[ACESSO REMOVIDO] Babá não pode mais acessar o canal ${channel.name}`,
+          `[ACESSO REMOVIDO] Babá não pode mais acessar o canal ${channelObject.name}`,
         );
         break;
       case "listar":
