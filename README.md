@@ -4,10 +4,11 @@ Bot Discord para controle de acesso ao canal privado "monitoramento" para o carg
 
 ## Funcionalidades
 
-- `/baba chegou` — Libera acesso da babá ao canal monitoramento
-- `/baba saiu` — Remove acesso da babá ao canal monitoramento
+- Comando `/baba chegou` ou mensagem `!baba chegou` — Libera acesso da babá ao canal monitoramento
+- Comando`/baba saiu` ou mensagem `!baba saiu` — Remove acesso da babá ao canal monitoramento
 - Apenas usuários com o cargo "pais" podem executar os comandos
 - Mensagens de resposta claras e logs para debug
+- 
 
 ## Requisitos
 
@@ -29,6 +30,7 @@ npm install
    - `CHANNEL_ID`: ID do canal "monitoramento" (a ser permitido/negado)
    - `ROLE_BABA_ID`: ID do cargo "baba"
    - `ROLE_PAIS_ID`: ID do cargo "pais"
+   - `CHANNEL_TO_SENT_COMMANDS`: ID do canal onde será enviado os comandos
 
 ## Deploy dos comandos
 
