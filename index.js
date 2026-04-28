@@ -1,8 +1,11 @@
+// const  = require("express");
+import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { createDiscordClient, Events } from "./Infra/discord.js";
-import baba from "./Models/baba.js";
-import channel from "./Models/channel.js";
+import baba from "./models/baba.js";
+import channel from "./models/channel.js";
+import routes from "./services/api/routes/routes.js";
 
 const { DISCORD_TOKEN, ROLE_PAIS_ID, CHANNEL_ID, ROLE_BABA_ID } = process.env;
 const client = createDiscordClient();
@@ -101,3 +104,13 @@ client.on(Events.MessageCreate, async (message) => {
 });
 
 client.login(DISCORD_TOKEN);
+
+const server = express();
+server.use(express.json());
+server.use(routes);
+const port = process.env.BABA_API_PORT || 3000;
+
+// Sobe o servidor Express
+server.listen(port, () => {
+  console.log(`Health check rodando na porta ${port}`);
+});
