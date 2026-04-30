@@ -3,9 +3,13 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { createDiscordClient, Events } from "./Infra/discord.js";
+
 import baba from "./models/baba.js";
+import { handleBabaCommand } from ("./lib/discord/commands/baba.js");
+      
 import channel from "./models/channel.js";
 import routes from "./services/api/routes/routes.js";
+
 
 const { DISCORD_TOKEN, ROLE_PAIS_ID, CHANNEL_ID, ROLE_BABA_ID } = process.env;
 const client = createDiscordClient();
@@ -50,7 +54,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   try {
-    const { handleBabaCommand } = await import("./commands/baba.js");
+      
     await handleBabaCommand(interaction);
   } catch (error) {
     console.error("Erro ao executar comando /baba:", error);
